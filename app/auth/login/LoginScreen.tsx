@@ -44,7 +44,7 @@ export default function LoginScreen() {
       setTimeout(() => {
         router.refresh();
         router.push("/dashboard"); 
-      }, 1000);
+      }, 900);
     } else {
       const errorMsg = useAuthStore.getState().error;
       showNotification("error", errorMsg || "Login gagal. Periksa kembali data Anda.");
@@ -80,9 +80,9 @@ export default function LoginScreen() {
             <h1 className="text-2xl font-black text-slate-800">Selamat Datang</h1>
           </div>
 
-          <form onSubmit={handleLogin} className="w-full space-y-5">
+          <form onSubmit={handleLogin} className="w-full space-y-5" aria-label="form-login">
             <div className="relative group">
-              <div className="input-icon">
+              <div className="input-icon" aria-hidden>
                 <User className="w-5 h-5" strokeWidth={2.5} />
               </div>
               <input
@@ -91,11 +91,15 @@ export default function LoginScreen() {
                 className="input-modern w-full pl-14 pr-4 py-4 rounded-2xl outline-none"
                 value={identifier}
                 onChange={e => setIdentifier(e.target.value)}
+                disabled={loading}
+                autoComplete="username"
+                aria-label="email-or-username"
+                autoFocus
               />
             </div>
 
             <div className="relative group">
-              <div className="input-icon">
+              <div className="input-icon" aria-hidden>
                 <Lock className="w-5 h-5" strokeWidth={2.5} />
               </div>
               <input
@@ -104,10 +108,17 @@ export default function LoginScreen() {
                 className="input-modern w-full pl-14 pr-4 py-4 rounded-2xl outline-none"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                disabled={loading}
+                autoComplete="current-password"
+                aria-label="password"
               />
             </div>
 
-            <button disabled={loading} className="w-full py-4 rounded-2xl bg-slate-900 text-white font-bold flex justify-center gap-2 hover:scale-[1.02] transition-all">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 rounded-2xl bg-slate-900 text-white font-bold flex justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            >
               {loading ? <Loader2 className="animate-spin" /> : <>Masuk <ArrowRight /></>}
             </button>
           </form>

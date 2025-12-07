@@ -21,7 +21,7 @@ interface UserState {
   profile: UserProfile | null;
   loading: boolean;
   error: string | null;
-  
+  init: () => Promise<void>;
   fetchProfile: () => Promise<void>;
   updateProfile: (data: Partial<UserProfile>) => Promise<boolean>;
   uploadAvatar: (file: File) => Promise<boolean>;
@@ -30,22 +30,44 @@ interface UserState {
   resetUser: () => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>((set, get) => ({
   profile: null,
-  loading: true,
+  loading: false,
   error: null,
 
+  init: async () => {
+    set({ loading: true, error: null });
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('mdr_token') : null;
+      if (token) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        await get().fetchProfile();
+      } else {
+        set({ profile: null, loading: false });
+      }
+    } catch (err: any) {
+      set({ profile: null, loading: false, error: err.response?.data?.message ?? 'Init gagal' });
+    }
+  },
+
   fetchProfile: async () => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
       const response = await api.get('/api/me');
-      if (response.data.status === 'sukses') {
+      if (response.data?.status === 'sukses' && response.data?.data) {
         set({ profile: response.data.data, loading: false });
       } else {
         set({ profile: null, loading: false });
       }
-    } catch (err) {
-      set({ profile: null, loading: false });
+    } catch (err: any) {
+      const msg = err.response?.data?.message ?? err.message ?? 'Fetch profile gagal';
+      if (err.response?.status === 401) {
+        localStorage.removeItem('mdr_token');
+        delete api.defaults.headers.common['Authorization'];
+        set({ profile: null, loading: false, error: 'Unauthorized' });
+      } else {
+        set({ profile: null, loading: false, error: msg });
+      }
     }
   },
 
@@ -53,17 +75,16 @@ export const useUserStore = create<UserState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await api.patch('/api/me/profile', data);
-      
+      const newData = response.data?.data ?? null;
       set((state) => ({
-        profile: state.profile ? { ...state.profile, ...response.data.data } : response.data.data,
-        loading: false
+        profile: state.profile ? { ...state.profile, ...(newData || {}) } : newData,
+        loading: false,
       }));
       return true;
-
     } catch (err: any) {
-      set({ 
-        error: err.response?.data?.message || err.message, 
-        loading: false 
+      set({
+        error: err.response?.data?.message || err.message || 'Update profile gagal',
+        loading: false,
       });
       return false;
     }
@@ -76,19 +97,19 @@ export const useUserStore = create<UserState>((set) => ({
       formData.append('avatar', file);
 
       const response = await api.post('/api/me/avatar', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
+      const avatar_url = response.data?.data?.avatar_url ?? null;
       set((state) => ({
-        profile: state.profile ? { ...state.profile, avatar_url: response.data.data.avatar_url } : null,
-        loading: false
+        profile: state.profile ? { ...state.profile, avatar_url } : state.profile,
+        loading: false,
       }));
-      return true;
-
+      return !!avatar_url;
     } catch (err: any) {
-      set({ 
-        error: err.response?.data?.message || err.message, 
-        loading: false 
+      set({
+        error: err.response?.data?.message || err.message || 'Upload avatar gagal',
+        loading: false,
       });
       return false;
     }
@@ -98,13 +119,15 @@ export const useUserStore = create<UserState>((set) => ({
     set({ loading: true, error: null });
     try {
       await api.patch('/api/me/account', data);
+      if (data.email) {
+        await get().fetchProfile();
+      }
       set({ loading: false });
       return true;
-
     } catch (err: any) {
-      set({ 
-        error: err.response?.data?.message || err.message, 
-        loading: false 
+      set({
+        error: err.response?.data?.message || err.message || 'Update account gagal',
+        loading: false,
       });
       return false;
     }
@@ -114,13 +137,14 @@ export const useUserStore = create<UserState>((set) => ({
     set({ loading: true, error: null });
     try {
       await api.delete('/api/me');
+      localStorage.removeItem('mdr_token');
+      delete api.defaults.headers.common['Authorization'];
       set({ profile: null, loading: false });
       return true;
-
     } catch (err: any) {
-      set({ 
-        error: err.response?.data?.message || err.message, 
-        loading: false 
+      set({
+        error: err.response?.data?.message || err.message || 'Hapus akun gagal',
+        loading: false,
       });
       return false;
     }

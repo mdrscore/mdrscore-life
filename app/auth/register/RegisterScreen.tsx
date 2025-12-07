@@ -3,7 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { User, Mail, Lock, ArrowRight, Loader2, CheckCircle2, AtSign, MailCheck } from "lucide-react";
+import { User, Mail, Lock, ArrowRight, Loader2, CheckCircle2, AtSign } from "lucide-react";
 import { useAuthStore } from "../../../stores/useAuthStore";
 import Notification from "../../../components/Notification";
 import "../../../styles/auth.css";
@@ -14,8 +14,6 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showVerifyModal, setShowVerifyModal] = useState(false);
-  
   const [notification, setNotification] = useState<{ type: "success" | "error" | "warning"; message: string; show: boolean }>({
     type: "success",
     message: "",
@@ -62,52 +60,15 @@ export default function RegisterScreen() {
     });
 
     if (result.success) {
-      if (result.requireVerify) {
-        setShowVerifyModal(true);
-      } else {
-        showNotification("success", "Registrasi berhasil! Mengalihkan...");
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 1500);
-      }
+      showNotification("success", "Registrasi berhasil! Mengalihkan...");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 1200);
     } else {
       const errorMsg = useAuthStore.getState().error;
       showNotification("error", errorMsg || "Terjadi kesalahan saat mendaftar.");
     }
   };
-
-  if (showVerifyModal) {
-    return (
-      <div className="auth-container">
-         <div className="glowing-orb orb-1"></div>
-         <div className="glowing-orb orb-2"></div>
-         <div className="glowing-orb orb-3"></div>
-         <div className="glowing-orb orb-4"></div>
-         <div className="glowing-orb orb-5"></div>
-         <div className="glowing-orb orb-6"></div>
-         <div className="glowing-orb orb-7"></div>
-         <div className="glowing-orb orb-8"></div>
-         <div className="glowing-orb orb-9"></div>
-
-         <div className="liquid-glass-card w-full max-w-md p-10 rounded-3xl mx-4 flex flex-col items-center text-center animate-in fade-in zoom-in duration-300">
-            <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6 shadow-inner">
-              <MailCheck size={40} />
-            </div>
-            <h2 className="text-2xl font-black text-slate-800 mb-2">Cek Email Anda</h2>
-            <p className="text-slate-600 mb-8 leading-relaxed">
-              Link verifikasi telah dikirim ke <strong>{email}</strong>.<br/>
-              Silakan cek inbox/spam Anda.
-            </p>
-            <button 
-              onClick={() => router.push('/auth/login')}
-              className="px-8 py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-black transition-all"
-            >
-              Ke Halaman Login
-            </button>
-         </div>
-      </div>
-    );
-  }
 
   return (
     <>
