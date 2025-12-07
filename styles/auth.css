@@ -1,0 +1,111 @@
+.auth-container {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #f3f4f6;
+  font-family: var(--font-nunito);
+}
+
+.glowing-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.7; 
+  z-index: 0;
+  will-change: transform, border-radius;
+  mix-blend-mode: multiply;
+}
+
+.orb-1 {
+  width: 60vw;
+  height: 60vw;
+  top: -20%;
+  left: -20%;
+  background: radial-gradient(circle at center, #a78bfa, #f472b6);
+  animation: liquidMove 10s infinite alternate ease-in-out;
+}
+
+.orb-2 {
+  width: 50vw;
+  height: 50vw;
+  bottom: -10%;
+  right: -10%;
+  background: radial-gradient(circle at center, #22d3ee, #3b82f6);
+  animation: liquidMove 12s infinite alternate-reverse ease-in-out;
+}
+
+.orb-3 {
+  width: 40vw;
+  height: 40vw;
+  bottom: -15%;
+  left: -10%;
+  background: radial-gradient(circle at center, #facc15, #fb923c);
+  opacity: 0.6;
+  animation: liquidMove 15s infinite alternate ease-in-out;
+}
+
+.orb-4 {
+  width: 35vw;
+  height: 35vw;
+  top: -10%;
+  right: -5%;
+  background: radial-gradient(circle at center, #e879f9, #c026d3);
+  opacity: 0.5;
+  animation: liquidMove 8s infinite alternate-reverse ease-in-out;
+}
+
+.liquid-glass-card {
+  position: relative;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(25px) saturate(150%);
+  -webkit-backdrop-filter: blur(25px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.3);
+  animation: floatCard 6s ease-in-out infinite;
+}
+
+.input-modern {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-modern:focus {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15), 0 10px 20px -5px rgba(139, 92, 246, 0.2);
+  transform: translateY(-2px);
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+  background: rgba(254, 226, 226, 0.8) !important;
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes liquidMove {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  33% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+  66% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+  100% { transform: translate(50px, 30px) scale(1.1) rotate(20deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+}
+
+@keyframes floatCard {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
