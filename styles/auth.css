@@ -13,49 +13,105 @@
 .glowing-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.7; 
+  filter: blur(90px); /* Blur lebih besar untuk kesan soft */
+  opacity: 0.4; /* Opacity lebih rendah agar soft */
   z-index: 0;
   will-change: transform, border-radius;
   mix-blend-mode: multiply;
 }
 
+/* Merah Soft */
 .orb-1 {
-  width: 60vw;
-  height: 60vw;
-  top: -20%;
-  left: -20%;
-  background: radial-gradient(circle at center, #a78bfa, #f472b6);
-  animation: liquidMove 10s infinite alternate ease-in-out;
-}
-
-.orb-2 {
-  width: 50vw;
-  height: 50vw;
-  bottom: -10%;
-  right: -10%;
-  background: radial-gradient(circle at center, #22d3ee, #3b82f6);
-  animation: liquidMove 12s infinite alternate-reverse ease-in-out;
-}
-
-.orb-3 {
-  width: 40vw;
-  height: 40vw;
-  bottom: -15%;
-  left: -10%;
-  background: radial-gradient(circle at center, #facc15, #fb923c);
-  opacity: 0.6;
+  width: 55vw;
+  height: 55vw;
+  top: -30%;
+  left: -25%;
+  background: radial-gradient(circle at center, #f87171, #ef4444);
   animation: liquidMove 15s infinite alternate ease-in-out;
 }
 
+/* Oranye Soft */
+.orb-2 {
+  width: 45vw;
+  height: 45vw;
+  top: 5%;
+  right: -20%;
+  background: radial-gradient(circle at center, #fb923c, #f97316);
+  animation: liquidMove 17s infinite alternate-reverse ease-in-out;
+}
+
+/* Kuning Soft */
+.orb-3 {
+  width: 50vw;
+  height: 50vw;
+  bottom: -25%;
+  left: -15%;
+  background: radial-gradient(circle at center, #facc15, #eab308);
+  animation: liquidMove 19s infinite alternate ease-in-out;
+}
+
+/* Hijau Soft */
 .orb-4 {
+  width: 40vw;
+  height: 40vw;
+  bottom: 10%;
+  right: 35%;
+  background: radial-gradient(circle at center, #4ade80, #22c55e);
+  animation: liquidMove 16s infinite alternate-reverse ease-in-out;
+}
+
+/* Tosca Soft */
+.orb-5 {
   width: 35vw;
   height: 35vw;
-  top: -10%;
-  right: -5%;
-  background: radial-gradient(circle at center, #e879f9, #c026d3);
-  opacity: 0.5;
-  animation: liquidMove 8s infinite alternate-reverse ease-in-out;
+  top: -15%;
+  left: 30%;
+  background: radial-gradient(circle at center, #2dd4bf, #14b8a6);
+  animation: liquidMove 18s infinite alternate ease-in-out;
+}
+
+/* Biru Soft */
+.orb-6 {
+  width: 50vw;
+  height: 50vw;
+  bottom: -20%;
+  right: -25%;
+  background: radial-gradient(circle at center, #60a5fa, #3b82f6);
+  animation: liquidMove 14s infinite alternate-reverse ease-in-out;
+}
+
+/* Indigo Soft */
+.orb-7 {
+  width: 45vw;
+  height: 45vw;
+  top: 20%;
+  left: -20%;
+  background: radial-gradient(circle at center, #818cf8, #6366f1);
+  animation: liquidMove 20s infinite alternate ease-in-out;
+}
+
+/* Ungu Soft */
+.orb-8 {
+  width: 40vw;
+  height: 40vw;
+  top: -25%;
+  right: 15%;
+  background: radial-gradient(circle at center, #a78bfa, #8b5cf6);
+  animation: liquidMove 15s infinite alternate-reverse ease-in-out;
+}
+
+/* Pink Soft */
+.orb-9 {
+  width: 48vw;
+  height: 48vw;
+  bottom: 5%;
+  left: 45%;
+  background: radial-gradient(circle at center, #f472b6, #ec4899);
+  animation: liquidMove 17s infinite alternate ease-in-out;
+}
+
+.orb-10 {
+  display: none; /* Nonaktifkan orb ke-10 jika hanya butuh 9 warna */
 }
 
 .liquid-glass-card {
@@ -71,14 +127,13 @@
 }
 
 .input-modern {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(5px);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .input-modern:focus {
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
   border-color: #8b5cf6;
   box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15), 0 10px 20px -5px rgba(139, 92, 246, 0.2);
   transform: translateY(-2px);
@@ -86,7 +141,7 @@
 
 .input-error {
   border-color: #ef4444 !important;
-  background: rgba(254, 226, 226, 0.8) !important;
+  background: #fef2f2 !important;
   animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
