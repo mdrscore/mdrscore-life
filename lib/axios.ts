@@ -5,7 +5,9 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const api = axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 api.interceptors.request.use(
@@ -16,7 +18,9 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 export default api;

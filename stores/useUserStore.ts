@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from '@/lib/supabaseClient';
+import api from '@/lib/axios';
 
 interface UserProfile {
   id: string;
@@ -30,9 +30,7 @@ interface UserState {
   resetUser: () => void;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-export const useUserStore = create<UserState>((set, get) => ({
+export const useUserStore = create<UserState>((set) => ({
   profile: null,
   loading: true,
   error: null,
@@ -40,25 +38,13 @@ export const useUserStore = create<UserState>((set, get) => ({
   fetchProfile: async () => {
     set({ loading: true });
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session || !API_URL) {
-        set({ profile: null, loading: false });
-        return;
-      }
-
-      const res = await fetch(`${API_URL}/api/me`, {
-        headers: { Authorization: `Bearer ${session.access_token}` },
-      });
-
-      const json = await res.json();
-      if (json.status === 'sukses') {
-        set({ profile: json.data, loading: false });
+      const response = await api.get('/api/me');
+      if (response.data.status === 'sukses') {
+        set({ profile: response.data.data, loading: false });
       } else {
         set({ profile: null, loading: false });
       }
-
     } catch (err) {
-      console.error(err);
       set({ profile: null, loading: false });
     }
   },
@@ -66,29 +52,19 @@ export const useUserStore = create<UserState>((set, get) => ({
   updateProfile: async (data) => {
     set({ loading: true, error: null });
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session || !API_URL) throw new Error("Sesi tidak valid");
-
-      const res = await fetch(`${API_URL}/api/me/profile`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}` 
-        },
-        body: JSON.stringify(data),
-      });
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message);
-
+      const response = await api.patch('/api/me/profile', data);
+      
       set((state) => ({
-        profile: state.profile ? { ...state.profile, ...json.data } : json.data,
+        profile: state.profile ? { ...state.profile, ...response.data.data } : response.data.data,
         loading: false
       }));
       return true;
 
     } catch (err: any) {
-      set({ error: err.message, loading: false });
+      set({ 
+        error: err.response?.data?.message || err.message, 
+        loading: false 
+      });
       return false;
     }
   },
@@ -96,29 +72,24 @@ export const useUserStore = create<UserState>((set, get) => ({
   uploadAvatar: async (file) => {
     set({ loading: true, error: null });
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session || !API_URL) throw new Error("Sesi tidak valid");
-
       const formData = new FormData();
       formData.append('avatar', file);
 
-      const res = await fetch(`${API_URL}/api/me/avatar`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${session.access_token}` },
-        body: formData,
+      const response = await api.post('/api/me/avatar', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message);
-
       set((state) => ({
-        profile: state.profile ? { ...state.profile, avatar_url: json.data.avatar_url } : null,
+        profile: state.profile ? { ...state.profile, avatar_url: response.data.data.avatar_url } : null,
         loading: false
       }));
       return true;
 
     } catch (err: any) {
-      set({ error: err.message, loading: false });
+      set({ 
+        error: err.response?.data?.message || err.message, 
+        loading: false 
+      });
       return false;
     }
   },
@@ -126,26 +97,15 @@ export const useUserStore = create<UserState>((set, get) => ({
   updateAccountSettings: async (data) => {
     set({ loading: true, error: null });
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session || !API_URL) throw new Error("Sesi tidak valid");
-
-      const res = await fetch(`${API_URL}/api/me/account`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}` 
-        },
-        body: JSON.stringify(data),
-      });
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message);
-
+      await api.patch('/api/me/account', data);
       set({ loading: false });
       return true;
 
     } catch (err: any) {
-      set({ error: err.message, loading: false });
+      set({ 
+        error: err.response?.data?.message || err.message, 
+        loading: false 
+      });
       return false;
     }
   },
@@ -153,22 +113,15 @@ export const useUserStore = create<UserState>((set, get) => ({
   deleteAccount: async () => {
     set({ loading: true, error: null });
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session || !API_URL) throw new Error("Sesi tidak valid");
-
-      const res = await fetch(`${API_URL}/api/me`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${session.access_token}` },
-      });
-
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message);
-
+      await api.delete('/api/me');
       set({ profile: null, loading: false });
       return true;
 
     } catch (err: any) {
-      set({ error: err.message, loading: false });
+      set({ 
+        error: err.response?.data?.message || err.message, 
+        loading: false 
+      });
       return false;
     }
   },
