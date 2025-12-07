@@ -70,7 +70,6 @@ export default function LoginScreen() {
         <div className="glowing-orb orb-7"></div>
         <div className="glowing-orb orb-8"></div>
         <div className="glowing-orb orb-9"></div>
-        <div className="glowing-orb orb-10"></div>
 
         <div className="liquid-glass-card w-full max-w-[400px] p-8 rounded-[40px] mx-4 flex flex-col items-center">
           
@@ -83,7 +82,9 @@ export default function LoginScreen() {
 
           <form onSubmit={handleLogin} className="w-full space-y-5">
             <div className="relative group">
-              <User className="absolute left-5 top-1/2 -translate-y-1/2 z-10 text-slate-400 w-5 h-5" />
+              <div className="input-icon">
+                <User className="w-5 h-5" strokeWidth={2.5} />
+              </div>
               <input
                 type="text"
                 placeholder="Email atau Username"
@@ -94,7 +95,9 @@ export default function LoginScreen() {
             </div>
 
             <div className="relative group">
-              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 z-10 text-slate-400 w-5 h-5" />
+              <div className="input-icon">
+                <Lock className="w-5 h-5" strokeWidth={2.5} />
+              </div>
               <input
                 type="password"
                 placeholder="Password"

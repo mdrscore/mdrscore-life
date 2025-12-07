@@ -80,6 +80,15 @@ export default function RegisterScreen() {
     return (
       <div className="auth-container">
          <div className="glowing-orb orb-1"></div>
+         <div className="glowing-orb orb-2"></div>
+         <div className="glowing-orb orb-3"></div>
+         <div className="glowing-orb orb-4"></div>
+         <div className="glowing-orb orb-5"></div>
+         <div className="glowing-orb orb-6"></div>
+         <div className="glowing-orb orb-7"></div>
+         <div className="glowing-orb orb-8"></div>
+         <div className="glowing-orb orb-9"></div>
+
          <div className="liquid-glass-card w-full max-w-md p-10 rounded-3xl mx-4 flex flex-col items-center text-center animate-in fade-in zoom-in duration-300">
             <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6 shadow-inner">
               <MailCheck size={40} />
@@ -119,7 +128,7 @@ export default function RegisterScreen() {
         <div className="glowing-orb orb-7"></div>
         <div className="glowing-orb orb-8"></div>
         <div className="glowing-orb orb-9"></div>
-        <div className="glowing-orb orb-10"></div>
+
         <div className="liquid-glass-card w-full max-w-[400px] p-8 rounded-[40px] mx-4 flex flex-col items-center">
           
           <div className="mb-6 flex flex-col items-center text-center">
@@ -131,31 +140,41 @@ export default function RegisterScreen() {
 
           <form onSubmit={handleRegister} className="w-full space-y-4">
             <div className="relative group">
-              <User className="absolute left-5 top-3.5 text-slate-400 w-5 h-5" />
+              <div className="input-icon">
+                <User className="w-5 h-5" strokeWidth={2.5} />
+              </div>
               <input type="text" placeholder="Nama Lengkap" className="input-modern w-full pl-14 pr-4 py-3 rounded-2xl outline-none"
                 value={fullName} onChange={e => setFullName(e.target.value)} />
             </div>
             
             <div className="relative group">
-              <AtSign className="absolute left-5 top-3.5 text-slate-400 w-5 h-5" />
+              <div className="input-icon">
+                <AtSign className="w-5 h-5" strokeWidth={2.5} />
+              </div>
               <input type="text" placeholder="Username" className="input-modern w-full pl-14 pr-4 py-3 rounded-2xl outline-none"
                 value={username} onChange={e => setUsername(e.target.value)} />
             </div>
 
             <div className="relative group">
-              <Mail className="absolute left-5 top-3.5 text-slate-400 w-5 h-5" />
+              <div className="input-icon">
+                <Mail className="w-5 h-5" strokeWidth={2.5} />
+              </div>
               <input type="email" placeholder="Email" className="input-modern w-full pl-14 pr-4 py-3 rounded-2xl outline-none"
                 value={email} onChange={e => setEmail(e.target.value)} />
             </div>
 
             <div className="relative group">
-              <Lock className="absolute left-5 top-3.5 text-slate-400 w-5 h-5" />
+              <div className="input-icon">
+                <Lock className="w-5 h-5" strokeWidth={2.5} />
+              </div>
               <input type="password" placeholder="Password" className="input-modern w-full pl-14 pr-4 py-3 rounded-2xl outline-none"
                 value={password} onChange={e => setPassword(e.target.value)} />
             </div>
 
             <div className="relative group">
-              <CheckCircle2 className="absolute left-5 top-3.5 text-slate-400 w-5 h-5" />
+              <div className="input-icon">
+                <CheckCircle2 className="w-5 h-5" strokeWidth={2.5} />
+              </div>
               <input type="password" placeholder="Konfirmasi Password" className="input-modern w-full pl-14 pr-4 py-3 rounded-2xl outline-none"
                 value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
             </div>
